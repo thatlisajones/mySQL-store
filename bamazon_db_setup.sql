@@ -29,4 +29,9 @@ VALUES ("Cherubim","Celestial Entities", 39.95, 15, 47),
 ("Small Mirror", "Skrying Out Loud", 15.00, 56, 100), 
 ("Large Mirror", "Skrying Out Loud", 45.00, 43, 100), 
 ("Tabletop Crystal Ball", "Skrying Out Loud", 395.00, 5, 20), 
-("Smoky Quartz", "Pretty Rocks", 36.00, 39, 100)
+("Smoky Quartz", "Pretty Rocks", 36.00, 39, 100);
+
+INSERT INTO departments (department_id, department_name, overhead_cost)
+VALUES (711, "Celestial Entities", 3500.00), 
+(724, "Pretty Rocks", 2000.00), 
+(761, "Kitchen Witchery", 600.00), (785, "Skrying Out Loud", 4000.00);
