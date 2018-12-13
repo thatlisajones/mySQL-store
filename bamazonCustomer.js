@@ -16,25 +16,27 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
   if (err) throw err;
-  showProducts();
+  console.log("connected as id " + connection.threadId + "\n");
+  displayProducts();
   });
 
 //Show table of products to customer
-function showProducts(answer) {
-      var query = "SELECT item_id,product_name,price,stock_quantity FROM products";
+function displayProducts(answer) {
+      var query = "SELECT product_name, department_name, customer_cost, stock_qty FROM products";
       connection.query(query,  function(err, res) {
-        var showTable = new Table({
-          head: ['Item ID', 'Product Name', 'Price', 'Quantity'],
+        var displayTable = new Table({
+          style: {head: ['green']},
+          head: ['Product', 'Department', 'Price', 'In stock'],
 
-            colWidths: [10, 50, 10, 10]
+            colWidths: [25, 25, 10, 10]
           });
 
           for (var i = 0; i < res.length; i++) {
-             showTable.push(
-              [res[i].item_id, res[i].product_name, res[i].price, res[i].stock_quantity]
+             displayTable.push(
+              [res[i].product_name, res[i].department_name, res[i].customer_cost, res[i].stock_qty]
               );
            }
-              console.log(showTable.toString());
+              console.log(displayTable.toString());
 
 
         pickProduct();
@@ -46,7 +48,7 @@ function pickProduct(answer) {
       {
         name: "item",
         type: "input",
-        message: "Enter the ID of the item you would like to buy"
+        message: "Type the name of the product you want to buy:"
       },
       {
         name: "count",
@@ -55,30 +57,30 @@ function pickProduct(answer) {
       }
 
       ]).then(function(answer) {
-          connection.query("SELECT item_id,product_name,price,stock_quantity FROM products WHERE ?",
-            {item_id: answer.item},  function(err, res) {
+          connection.query("SELECT product_name, department_name, customer_cost, stock_qty FROM products WHERE ?",
+            {product_name: answer.item},  function(err, res) {
 
               //console.log("count " + answer.count);
 
               if (parseInt(answer.count) > res[0].stock_quantity) {
 
-                console.log("sorry, there are only " + res[0].stock_quantity + " left");
+                console.log("sorry, there are only " + res[0].stock_qty + " left");
                 pickProduct();
 
               }
 
               else {
-                console.log("Your purchase of " + answer.count + ' ' + res[0].product_name +"/s total cost is: $ " + parseInt(res[0].price) * parseInt(answer.count));
-               var quantityLeft = res[0].stock_quantity - answer.count;
+                console.log("Your purchase of " + answer.count + ' ' + res[0].product_name +"/s total cost is: $ " + parseInt(res[0].customer_cost) * parseInt(answer.count));
+               var quantityLeft = res[0].stock_qty - answer.count;
                       console.log(quantityLeft);
                       connection.query(
                         "UPDATE products SET ? WHERE ?",
                         [
                           {
-                            stock_quantity: quantityLeft
+                            stock_qty: quantityLeft
                           },
                           {
-                            item_id: answer.item
+                            product_name: answer.item
                           }
                         ],
                         function(error) {
@@ -86,8 +88,8 @@ function pickProduct(answer) {
                          
                          
                         }); 
-                      console.log("Inventory updated. There are  " + quantityLeft + "in stock"); 
-                      showProducts();
+                      console.log("Inventory updated. There are " + quantityLeft + " units in stock"); 
+                      displayProducts();
                }
 
 
