@@ -22,18 +22,18 @@ connection.connect(function(err) {
 
 //Show table of products to customer
 function displayProducts(answer) {
-      var query = "SELECT product_name, department_name, customer_cost, stock_qty FROM products";
+      var query = "SELECT id, product_name, department_name, customer_cost, stock_qty FROM products";
       connection.query(query,  function(err, res) {
         var displayTable = new Table({
           style: {head: ['green']},
-          head: ['Product', 'Department', 'Price', 'In stock'],
+          head: ['id','Product', 'Department', 'Price', 'In stock'],
 
-            colWidths: [25, 25, 10, 10]
+            colWidths: [10, 25, 25, 10, 10]
           });
 
           for (var i = 0; i < res.length; i++) {
              displayTable.push(
-              [res[i].product_name, res[i].department_name, res[i].customer_cost, res[i].stock_qty]
+              [res[i].id, res[i].product_name, res[i].department_name, res[i].customer_cost, res[i].stock_qty]
               );
            }
               console.log(displayTable.toString());
@@ -48,7 +48,7 @@ function pickProduct(answer) {
       {
         name: "item",
         type: "input",
-        message: "Type the name of the product you want to buy:"
+        message: "Type the ID # of the product you want to buy:"
       },
       {
         name: "count",
@@ -57,14 +57,14 @@ function pickProduct(answer) {
       }
 
       ]).then(function(answer) {
-          connection.query("SELECT product_name, department_name, customer_cost, stock_qty FROM products WHERE ?",
-            {product_name: answer.item},  function(err, res) {
+          connection.query("SELECT id, product_name, department_name, customer_cost, stock_qty FROM products WHERE ?",
+            {id: answer.item},  function(err, res) {
 
               //console.log("count " + answer.count);
 
-              if (parseInt(answer.count) > res[0].stock_quantity) {
+              if (parseInt(answer.count) > res[0].stock_qty) {
 
-                console.log("sorry, there are only " + res[0].stock_qty + " left");
+                console.log("Sorry, we have only " + res[0].stock_qty + " in stock.");
                 pickProduct();
 
               }
