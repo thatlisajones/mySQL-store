@@ -38,25 +38,30 @@ function displayProducts(answer) {
            }
               console.log(displayTable.toString());
 
-              connection.end();
+            //   connection.end();
             //   pickProduct();
-            // lowInventoryList();
+            lowInventoryList();
             //   promptAction();
       });
     }
 
 function lowInventoryList() {
-    connection.query("SELECT id, product_name, stock_qty FROM products  WHERE stock_qty < 5", function(error, res) {
-      if (error) throw error;
-      var table = new Table({
-        head: ['ID #', 'Product Name', 'Stock Qty']
-      });
-      for (i = 0; i < res.length; i++) {
-        table.push(
-          [res[i].id, res[i].product_name, res[i].stock_quantity]
-        );
-      }
-      console.log(displayTable.toString());
+    var query = "SELECT id, product_name, stock_qty FROM products  WHERE stock_qty < 5";
+      connection.query(query,  function(err, res) {
+        var stockTable = new Table({
+          style: {head: ['green']},
+          head: ['ID #', 'Product Name', 'In stock'],
+
+            colWidths: [10, 25, 10]
+          });
+          
+          for (var i = 0; i < res.length; i++) {
+            stockTable.push(
+             [res[i].id, res[i].product_name, res[i].stock_qty]
+             );
+          }
+             console.log(stockTable.toString());
+
       connection.end();
     });
   };
