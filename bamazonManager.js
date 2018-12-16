@@ -18,20 +18,21 @@ connection.connect(function(err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId + "\n");
 //   connection.end();
-  promptAction();
+displayProducts();
+  
   });
 
     function promptAction() {
         inquirer.prompt([{
           type: 'list',
           message: 'Welcome to Manager View. Choose what you want to do.',
-          choices: ['See Products for Sale', 'See Low Inventory', 'Add to Inventory', 'Add New Product'],
+          choices: ['See Low Inventory', 'Add to Inventory', 'Add New Product'],
           name: "action"
         }, ]).then(function(selection) {
           switch (selection.action) {
-            case 'View Products for Sale':
-              displayProducts();
-              break;
+            // case 'View Products for Sale':
+            //   displayProducts();
+            //   break;
       
             case 'View Low Inventory':
               lowInventoryList();
@@ -51,7 +52,7 @@ connection.connect(function(err) {
       };
 
       //Show table of products for Manager
-      function displayProducts(displayTable) {
+      function displayProducts() {
         var query = "SELECT id, product_name, department_name, customer_cost, stock_qty FROM products";
         connection.query(query,  function(err, res) {
           var displayTable = new Table({
@@ -68,8 +69,8 @@ connection.connect(function(err) {
              }
                 console.log(displayTable.toString());
   
-                connection.end();
-          // promptAction();
+                // connection.end();
+                promptAction();
         });
   }
 
