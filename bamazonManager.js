@@ -21,31 +21,6 @@ connection.connect(function(err) {
   promptAction();
   });
 
-//Show table of products for Manager
-function displayProducts(answer) {
-      var query = "SELECT id, product_name, department_name, customer_cost, stock_qty FROM products";
-      connection.query(query,  function(err, res) {
-        var displayTable = new Table({
-          style: {head: ['green']},
-          head: ['ID #', 'Product', 'Department', 'Price', 'In stock'],
-
-            colWidths: [10, 25, 25, 10, 10]
-          });
-
-          for (var i = 0; i < res.length; i++) {
-             displayTable.push(
-              [res[i].id, res[i].product_name, res[i].department_name, res[i].customer_cost, res[i].stock_qty]
-              );
-           }
-              console.log(displayTable.toString());
-
-              connection.end();
-            //   pickProduct();
-            // lowInventoryList();
-            //   promptAction();
-      });
-    }
-
     function promptAction() {
         inquirer.prompt([{
           type: 'list',
@@ -75,9 +50,32 @@ function displayProducts(answer) {
         });
       };
 
+      //Show table of products for Manager
+      function displayProducts(displayTable) {
+        var query = "SELECT id, product_name, department_name, customer_cost, stock_qty FROM products";
+        connection.query(query,  function(err, res) {
+          var displayTable = new Table({
+            style: {head: ['green']},
+            head: ['id','Product', 'Department', 'Price', 'In stock'],
+  
+              colWidths: [10, 25, 25, 10, 10]
+            });
+  
+            for (var i = 0; i < res.length; i++) {
+               displayTable.push(
+                [res[i].id, res[i].product_name, res[i].department_name, res[i].customer_cost, res[i].stock_qty]
+                );
+             }
+                console.log(displayTable.toString());
+  
+                connection.end();
+          // promptAction();
+        });
+  }
+
 function lowInventoryList() {
     var query = "SELECT id, product_name, stock_qty FROM products  WHERE stock_qty < 5";
-      connection.query(query,  function(err, res) {
+      connection.query(query, function(err, res) {
         var stockTable = new Table({
           style: {head: ['green']},
           head: ['ID #', 'Product Name', 'In stock'],
@@ -204,5 +202,8 @@ function lowInventoryList() {
         connection.end();
     });
   });
+  
   };
+
+  
   
