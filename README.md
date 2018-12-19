@@ -6,4 +6,6 @@ Running bamazonCustomer.js, the app shows the customer a list of products availa
 
 Running bamazonManager.js, a store manager can view a list of products. The app allows the manager to see if stock is low, and to add more stock. The app also allows the manager to add additional products for sale.
 
-Screenshots TK
+![bamazonCustomer.js example 1](https://github.com/thatlisajones/mySQL-store/blob/master/images/bam01.PNG);
+
+![bamazonCustomer.js example 2](https://github.com/thatlisajones/mySQL-store/blob/master/images/bam02.PNG);
